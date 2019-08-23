@@ -67,6 +67,8 @@ function winConditions(board: string[][], player: string) {
         if (winVertical === 4) {
           return true
         }
+      } else {
+        winVertical = 0
       }
     }
   }
@@ -78,6 +80,8 @@ function winConditions(board: string[][], player: string) {
         if (winHorizontal === 4) {
           return true
         }
+      } else {
+        winHorizontal = 0
       }
     }
   }
