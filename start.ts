@@ -1,7 +1,7 @@
 import * as readline from 'readline'
 
 async function main() {
-  let board = [
+  const board = [
     ["-", "-", "-", "-", "-", "-", "-"],
     ["-", "-", "-", "-", "-", "-", "-"],
     ["-", "-", "-", "-", "-", "-", "-"],
@@ -10,30 +10,42 @@ async function main() {
     ["-", "-", "-", "-", "-", "-", "-"],
   ]
 
+  let turn = 0
 
   while (true) {
-    const ans = await askQuestion("Which column number? ");
+    const ans = parseInt(await askQuestion("Which column number? "));
+    const player = turn % 2 === 0 ? 'o' : 'x'
 
-    if (parseInt(ans) > 0 && parseInt(ans) < 8) {
+    if (ans > 0 && ans < 8) {
       console.log("Your answer:", ans)
+      const x = ans - 1
 
-      for (let i = 0; i < board[0].length - 1; i++) {
-        if (board[i][parseInt(ans) - 1] !== '-') {
-          board[i - 1][parseInt(ans) - 1] = 'o'
-        }
-        if (i === board.length - 1) {
-          if (board[i][parseInt(ans) - 1] !== '-') {
-            board[i - 1][parseInt(ans) - 1] = 'o'
-          } else {
-            board[i][parseInt(ans) - 1] = 'o'
-          }
-        }
+      const freeSpot = getFreeIndex(board, x)
+      console.log(freeSpot)
+      if(freeSpot === -1) {
+        // full
+        console.log("Full!")
+      } else {
+        board[freeSpot][x] = player
       }
+
+      turn++
       console.log(board)
     } else {
       console.log("Invalid column number! Choose a number between 1 - 7")
     }
   }
+}
+
+function getFreeIndex(board: string[][], x: number){
+
+  for (let i = 0; i < board.length; i++) {
+    if (board[i][x] !== '-') {
+      return i - 1
+    }
+  }
+
+  return board.length - 1
 }
 
 function askQuestion(query: string) {
